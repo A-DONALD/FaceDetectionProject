@@ -1,0 +1,170 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat&display=swap");
+
+* {box-sizing: border-box;}
+
+body {
+    background: linear-gradient(to left, #0D0D0E, #17202A, #0D0D0E);
+    background-color: #17202A;
+    color: #2B87C8;
+    margin: 0px;
+    padding: 0px;
+    transition: background 1s linear;
+}
+
+body.light {
+    background: linear-gradient(to left, #9bddff, #afeeee, #b9f2ff);
+    transition: background 1s linear;
+    color: #b9f2ff;
+}
+
+.checkbox {
+    opacity: 0;
+    position: absolute;
+}
+
+.checkbox-label {
+    background-color: #111;
+    width: 50px;
+    height: 26px;
+    border-radius: 50px;
+    position: relative;
+    padding: 5px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.fa-moon {color: #f1c40f;}
+
+.fa-sun {color: #f39c12;}
+
+.checkbox-label .ball {
+    background-color: #fff;
+    width: 22px;
+    height: 22px;
+    position: absolute;
+    left: 2px;
+    top: 2px;
+    border-radius: 50%;
+    transition: transform 0.2s linear;
+}
+
+.checkbox:checked + .checkbox-label .ball {
+    transform: translateX(24px);
+}
+
+header, footer {
+    background-color: #1C2833;
+    height: 40px;
+    line-height: 40px;
+    color: #2B87C8;
+    text-align: center;
+    border-radius: 5px;
+    font-family: 'Jost', sans-serif;
+}
+
+img{
+    border-radius: 10px;
+}
+
+.container {
+    display: flex;
+    height: 80vh;
+}
+
+.column {
+    flex: 1;
+    padding: 20px;
+    margin: 0 auto;
+}
+
+#center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#dropZone {
+    color: white;
+    border-radius: 10px;
+    border: 5px dashed #666;
+    padding: 20px;
+    text-align: center;
+    height: 170px;
+    width: 38vw;
+    margin: auto;
+    backdrop-filter: blur(5px);
+}
+
+#text-classification, #docs-classification{
+    margin-top: 45px;
+    color: #2B87C8;
+    background-color: #1C2833;
+    width: 100%;
+    padding: 10px;
+    border: 3px solid #1C2833;
+    z-index: 0;
+}
+
+#text-classification {
+    border-bottom-left-radius: 50%;
+    border-top-left-radius: 50%;
+    border-bottom-right-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+#docs-classification{
+    border-bottom-left-radius: 10px;
+    border-top-left-radius: 10px;
+    border-bottom-right-radius: 50%;
+    border-top-right-radius: 50%;
+}
+
+@keyframes slide {
+    to {
+        background-position:25vw;
+    }
+}
+
+#text-classification:hover, #docs-classification:hover{
+    transition: 0.5s;
+    color: white;
+    background-image: linear-gradient(90deg, #17202A 0%, #003153 40%, #1C2833 80%, #17202A 100%);
+    animation:slide 5s linear infinite;
+}
+
+#text-classification:active, #docs-classification:active{
+    border: solid;
+    border-color: grey;
+}
+
+#text-classification:hover{
+    transition: 0.25s;
+    transform: translateX(-5px);
+}
+
+#docs-classification:hover{
+    transition: 0.25s;
+    transform: translateX(5px);
+}
+
+#dropZone.drag-over{
+    border: 3px dashed #333;
+    background-color: #cbc7c7a3;
+}
+
+.upload-button {
+    margin-top: 10px;
+}
+
+#textInput{
+    background-color: #1C2833;
+    color: #2B87C8;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    height: 200px;
+    width: 38vw;
+    resize: none;
+    padding: 10px;
+}
