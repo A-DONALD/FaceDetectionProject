@@ -1,101 +1,95 @@
-let randomForestLabel = "earn";
-let kNeighborsLabel = "earn";
-let multinomialLabel = "earn";
-let randomForestAccuracy = 85.5;
-let kNeighborsAccuracy = 83.3;
-let multinomialAccuracy = 79.8;
+const dropZone = document.getElementById('drop-zone');
+const fileInput = document.getElementById('file-input');
+const filePath = document.getElementById('file-path');
+const uploadButton = document.getElementById('upload-btn');
+const deleteButton = document.getElementById('delete-btn');
+const preview = document.getElementById('preview');
 
-// button to change the color of the background - switch theme
-const checkbox = document.getElementById("checkbox")
-checkbox.addEventListener("change", () => {
-  document.body.classList.toggle("light")
-})
+let selectedFile = null;
 
-// This function is responsible to print out the label of the document as a diagram with chart.js
-function printResultDiagram(){
-    const randomPercentage = 34.4;
-    const kNeighborsPercentage= 33.6;
-    const multinomialPercentage = 32;
+// Gestion du drag & drop
+dropZone.addEventListener('dragover', (event) => {
+    event.preventDefault();
+    dropZone.classList.add('dragover');
+});
 
-    let xValues, yValues;
+dropZone.addEventListener('dragleave', () => {
+    dropZone.classList.remove('dragover');
+});
 
-    // config the different element of the diagram
-    //if any element are the same, we merge them into the diagram and sum their percentages.
-    if (randomForestLabel === kNeighborsLabel && kNeighborsLabel === multinomialLabel) {
-        xValues = [randomForestLabel];
-        yValues = [100];
-    } else if (randomForestLabel === kNeighborsLabel) {
-        xValues = [randomForestLabel, multinomialLabel];
-        yValues = [randomPercentage+kNeighborsPercentage, multinomialPercentage];
-    } else if (kNeighborsLabel === multinomialLabel) {
-        xValues = [kNeighborsLabel, randomForestLabel];
-        yValues = [kNeighborsPercentage+multinomialPercentage, randomPercentage];
-    } else if (randomForestLabel === multinomialLabel) {
-        xValues = [randomForestLabel, kNeighborsLabel];
-        yValues = [multinomialPercentage+randomPercentage, kNeighborsPercentage];
-    } else {
-        xValues = [randomForestLabel, kNeighborsLabel, multinomialLabel];
-        yValues = [randomPercentage, kNeighborsPercentage, multinomialPercentage];
+dropZone.addEventListener('drop', (event) => {
+    event.preventDefault();
+    dropZone.classList.remove('dragover');
+
+    selectedFile = event.dataTransfer.files[0];
+    if (selectedFile) {
+        handleFile(selectedFile);
+    }
+});
+
+// Gestion de la sélection de fichier
+fileInput.addEventListener('change', () => {
+    selectedFile = fileInput.files[0];
+    if (selectedFile) {
+        handleFile(selectedFile);
+    }
+});
+
+function handleFile(file) {
+    const validExtensions = ["image/jpeg", "image/png", "image/gif", "image/webp"];
+    if (!validExtensions.includes(file.type)) {
+        alert("Veuillez sélectionner un fichier image valide (JPEG, PNG, GIF, WEBP).");
+        filePath.textContent = "";
+        preview.innerHTML = "<span>Aucune image sélectionnée</span>";
+        return;
     }
 
-    // choose the color of the different element of the diagram
-    const barColors = [
-      "#87ceeb",
-      "#000080",
-      "#6495ed"
-    ];
+    filePath.textContent = file.name;
 
-    // create a diagram to print out the solution with using chart.js
-    new Chart("myChart", {
-        type: "doughnut",
-        data: {
-        labels: xValues,
-        datasets: [{
-            backgroundColor: barColors,
-            data: yValues
-        }]
-        },
-        options: {
-            title: {
-                display: true,
-                text: "Label of the text"
-            }
-        }
-    });
+    // Afficher l'aperçu de l'image
+    const reader = new FileReader();
+    reader.onload = (event) => {
+        preview.innerHTML = `<img src="${event.target.result}" alt="Aperçu de l'image">`;
+    };
+    reader.readAsDataURL(file);
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    const textClassificationBtn = document.getElementById('text-classification');
+// Envoi du fichier au serveur Flask
+uploadButton.addEventListener('click', () => {
+    if (!selectedFile) {
+        alert('Veuillez sélectionner un fichier.');
+        return;
+    }
 
-    const textInput = document.getElementById('textInput');
-    const resultDiv = document.getElementById('result-div');
-    const dropZone = document.getElementById('dropZone');
+    const formData = new FormData();
+    formData.append('file', selectedFile);
 
-    // This function is responsible to classify the text in the textarea bag
-    textClassificationBtn.addEventListener('click', function() {
-        const text = textInput.value;
-        const xhr = new XMLHttpRequest();
-
-        // Make an AJAX request to the /classify route to obtain the label of the documents
-        xhr.open('POST', '/txt-classify');
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr.onload = function() {
-            if (xhr.status === 200) {
-                const response = JSON.parse(xhr.responseText);
-                const words = response.words;
-                randomForestLabel = words[0];
-                kNeighborsLabel = words[1];
-                multinomialLabel = words[2];
-                //print the result of each classifier in the "result-div"
-                resultDiv.innerHTML = `
-                    <p>${words[0] + " : " + randomForestAccuracy}</p>
-                    <p>${words[1] + " : " + kNeighborsAccuracy}</p>
-                    <p>${words[2] + " : " + multinomialAccuracy}</p>
-                `;
-                printResultDiagram();
-            }
-        };
-
-        xhr.send('text=' + encodeURIComponent(text));
+    fetch('/upload', {
+        method: 'POST',
+        body: formData,
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert('Fichier envoyé avec succès : ' + data.message);
+    })
+    .catch(error => {
+        console.error('Erreur lors de l\'envoi :', error);
     });
+});
+
+// Suppréssion du dossier upload
+deleteButton.addEventListener('click', () => {
+    if (confirm("Êtes-vous sûr de vouloir supprimer le répertoire et son contenu ?")) {
+        fetch('/delete', {
+            method: 'DELETE'
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message);
+        })
+        .catch(error => {
+            console.error('Erreur lors de la suppression :', error);
+            alert("Erreur lors de la suppression du répertoire.");
+        });
+    }
 });

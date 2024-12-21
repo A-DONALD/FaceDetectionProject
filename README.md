@@ -1,14 +1,17 @@
 # AI-Classifier
-<div align="left">
-    <img src="https://img.shields.io/badge/python-yellow?style=for-the-badge&logo=python">
-    <img src="https://img.shields.io/badge/tensorflow-blue?style=for-the-badge&logo=tensorflow">
-    <img src="https://img.shields.io/badge/flask-grey?style=for-the-badge&logo=flask">
-</div>
+
+<img src="https://img.shields.io/badge/python-yellow?style=for-the-badge&logo=python" alt="Python">
+<img src="https://img.shields.io/badge/tensorflow-blue?style=for-the-badge&logo=tensorflow" alt="Tensorflow">
+<img src="https://img.shields.io/badge/keras-blue?style=for-the-badge&logo=keras" alt="Keras">
+<img src="https://img.shields.io/badge/flask-grey?style=for-the-badge&logo=flask" alt="Flask">
 
 ---
 
-AI Docs classifier is an open-source tool who use the artificial intelligence to determine the meaning of sentence.
-This is an Update of AI-Classifier which uses Flask to link a web interface. we don't use GUI Interface this time.
+FaceDetection project is an ERASMUS project who use DeepLearning (Python + Tensorflow) 
+to predict if an image is photoshopped or not. For the development we are using Python 3.12.2, but
+it's supposed to work with Python 3.6 and above even if we haven't tested it though.
+Still important to have a Python 3.6 and above to run this project so you can download
+Tensorflow 2.0.0 and above with Keras integrated.
 
 ## Prerequisites
 
@@ -25,10 +28,10 @@ Before you begin, make sure you have the following installed on your local machi
    cd /path/to/your/directory
    ```
 
-2. Clone the AI project from Github, follow these steps:
+2. Clone the AI project from GitHub, follow these steps:
 
    ```
-   git clone https://github.com/A-DONALD/FaceDetetctionProject.git
+   git clone https://github.com/A-DONALD/FaceDetectionProject.git
    ```
 
 ## Launch the project
@@ -36,7 +39,7 @@ Before you begin, make sure you have the following installed on your local machi
 1. After the repository has been cloned, navigate to the project folder:
 
    ```
-   cd FaceDetetctionProject
+   cd FaceDetectionProject
    ```
 
 2. Install the required Python packages using pip:
@@ -51,4 +54,4 @@ Before you begin, make sure you have the following installed on your local machi
    python run.py
    ```
 
-_For more instruction, refer to [How to use it](https://github.com/A-DONALD/.../wiki)_
+_For more instruction, refer to [How to use it](https://github.com/A-DONALD/FaceDetectionProject/wiki)_
