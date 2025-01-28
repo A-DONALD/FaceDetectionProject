@@ -1,75 +1,99 @@
 body {
-    font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
     margin: 0;
-    background-color: #f3f3f3;
-}
-.preview {
-    margin-bottom: 20px;
-    width: 300px;
-    height: 200px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    background-color: #f9f9f9;
+    padding: 0;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
+    height: 100vh;
+    font-family: Arial, sans-serif;
 }
+
+.drop-zone {
+    width: 50%;
+    background-color: #d4aeed;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.preview {
+    width: 50%;
+    height: 50%;
+    background-color: #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed #ccc;
+    box-sizing: border-box;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.preview.dragover {
+    background-color: #29739d;
+    border-color: #3273b8;
+}
+
 .preview img {
     max-width: 100%;
     max-height: 100%;
 }
-.drop-zone {
-    width: 300px;
-    height: 200px;
-    border: 2px dashed #007bff;
-    border-radius: 10px;
+
+.main-zone {
+    width: 50%;
+    background-color: #6aaff4;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-    background-color: #ffffff;
-    color: #007bff;
-    text-align: center;
-    padding: 10px;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
 }
-.drop-zone.dragover {
-    background-color: #e9f7ff;
-    border-color: #0056b3;
-}
+
 .file-path {
     margin-top: 10px;
     font-size: 14px;
     color: #333;
 }
-.upload-btn {
-    margin-top: 10px;
+
+.action-btn {
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.btn {
     padding: 8px 16px;
-    background-color: #007bff;
+    margin-right: 5px;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
 }
-.upload-btn:hover {
+
+.select {
+    background-color: #007bff;
+}
+
+.select:hover {
     background-color: #0056b3;
 }
-.delete-btn {
-    margin-top: 10px;
-    padding: 8px 16px;
-    background-color: #ff0051;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+
+.upload {
+    background-color: #00ff2a;
 }
-.delete-btn:hover {
+
+.upload:hover {
+    background-color: #00b300;
+}
+
+.delete {
+    background-color: #ff0051;
+}
+
+.delete:hover {
     background-color: #b3003f;
 }
+
 input[type="file"] {
     display: none;
 }

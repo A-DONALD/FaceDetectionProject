@@ -68,13 +68,13 @@ uploadButton.addEventListener('click', () => {
         method: 'POST',
         body: formData,
     })
-    .then(response => response.json())
-    .then(data => {
-        alert('Fichier envoyé avec succès : ' + data.message);
-    })
-    .catch(error => {
-        console.error('Erreur lors de l\'envoi :', error);
-    });
+        .then(response => response.json())
+        .then(data => {
+            alert('Fichier envoyé avec succès : ' + data.message);
+        })
+        .catch(error => {
+            console.error('Erreur lors de l\'envoi :', error);
+        });
 });
 
 // Suppréssion du dossier upload
@@ -83,13 +83,13 @@ deleteButton.addEventListener('click', () => {
         fetch('/delete', {
             method: 'DELETE'
         })
-        .then(response => response.json())
-        .then(data => {
-            alert(data.message);
-        })
-        .catch(error => {
-            console.error('Erreur lors de la suppression :', error);
-            alert("Erreur lors de la suppression du répertoire.");
-        });
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+            })
+            .catch(error => {
+                console.error('Erreur lors de la suppression :', error);
+                alert("Erreur lors de la suppression du répertoire.");
+            });
     }
 });

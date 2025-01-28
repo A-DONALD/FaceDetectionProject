@@ -1,31 +1,46 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Drop Zone avec fichier</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename= 'css/style.css') }}">
     <link rel="Website Icon" type="png" href="{{ url_for('static', filename= 'img/icone.png') }}">
-    <style>
 
-    </style>
 </head>
+
 <body>
 
-<div class="preview" id="preview">
-    <span>Aucune image sélectionnée</span>
-</div>
+    <div class="drop-zone" id="drop-zone">
+        <div class="preview" id="preview">
+            <span>Aucune image sélectionnée</span>
+        </div>
+        <label for="file-input" class="select btn">Sélectionner un fichier</label>
+        <input type="file" id="file-input" accept="image/*">
+        <p>Déposez un fichier ici ou cliquez sur le bouton ci-dessous</p>
+    </div>
 
-<div class="drop-zone" id="drop-zone">
-    <p>Déposez un fichier ici ou cliquez sur le bouton ci-dessous</p>
-    <label for="file-input" class="upload-btn">Sélectionner un fichier</label>
-    <input type="file" id="file-input" accept="image/*">
-    <div class="file-path" id="file-path"></div>
-    <button id="upload-btn" class="upload-btn">Envoyer</button>
-    <button id="delete-btn" class="delete-btn">Supprimer les téléchargements</button>
-</div>
+    <div class="main-zone" id="main-zone">
+        <div class="file-path" id="file-path"></div>
+        <div class="action-btn" id="action-btn">
+            <button id="upload-btn" class="upload btn">Envoyer</button>
+            <button id="delete-btn" class="delete btn">Supprimer les téléchargements</button>
+        </div>
+        <a href="https://github.com/a-donald">
+            <img alt="donald-github-stats"
+                src="https://github-stats-alpha.vercel.app/api?username=a-donald&cc=22272e&tc=37BCF6&ic=fff&bc=0000">
+        </a>
+        <a href="https://github.com/Mounir1200">
+            <img alt="mounir-github-stats"
+                src="https://github-stats-alpha.vercel.app/api?username=Mounir1200&cc=22272e&tc=37BCF6&ic=fff&bc=0000">
+        </a>
+    </div>
 
-<script src="{{ url_for('static', filename= 'js/script.js') }}"></script>
+    <script src="{{ url_for('static', filename= 'js/script.js') }}"></script>
 
 </body>
+
+
 </html>
