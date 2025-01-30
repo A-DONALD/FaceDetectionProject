@@ -8,7 +8,7 @@ body {
 
 .drop-zone {
     width: 50%;
-    background-color: #d4aeed;
+    background-color: #6C12D0;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -40,7 +40,7 @@ body {
 
 .main-zone {
     width: 50%;
-    background-color: #6aaff4;
+    background-color: #16A2D4;
     display: flex;
     flex-direction: column;
     align-items: center;

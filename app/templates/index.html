@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 
 <head>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Drop Zone avec fichier</title>
+    <title>Fake or Real</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename= 'css/style.css') }}">
     <link rel="Website Icon" type="png" href="{{ url_for('static', filename= 'img/icone.png') }}">
 
@@ -15,18 +15,18 @@
 
     <div class="drop-zone" id="drop-zone">
         <div class="preview" id="preview">
-            <span>Aucune image sélectionnée</span>
+            <span>No picture selected</span>
         </div>
-        <label for="file-input" class="select btn">Sélectionner un fichier</label>
+        <label for="file-input" class="select btn">Select a file</label>
         <input type="file" id="file-input" accept="image/*">
-        <p>Déposez un fichier ici ou cliquez sur le bouton ci-dessous</p>
+        <p>Drop a file here or click on the button bellow</p>
     </div>
 
     <div class="main-zone" id="main-zone">
         <div class="file-path" id="file-path"></div>
         <div class="action-btn" id="action-btn">
-            <button id="upload-btn" class="upload btn">Envoyer</button>
-            <button id="delete-btn" class="delete btn">Supprimer les téléchargements</button>
+            <button id="upload-btn" class="upload btn">Execute</button>
+            <button id="delete-btn" class="delete btn">Delete all uploads files</button>
         </div>
         <a href="https://github.com/a-donald">
             <img alt="donald-github-stats"

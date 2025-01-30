@@ -7,7 +7,7 @@ const preview = document.getElementById('preview');
 
 let selectedFile = null;
 
-// Gestion du drag & drop
+// drag & drop manage
 dropZone.addEventListener('dragover', (event) => {
     event.preventDefault();
     dropZone.classList.add('dragover');
@@ -27,7 +27,7 @@ dropZone.addEventListener('drop', (event) => {
     }
 });
 
-// Gestion de la sélection de fichier
+// Manage the file selection
 fileInput.addEventListener('change', () => {
     selectedFile = fileInput.files[0];
     if (selectedFile) {
@@ -35,10 +35,11 @@ fileInput.addEventListener('change', () => {
     }
 });
 
+// handle the file after insertion
 function handleFile(file) {
     const validExtensions = ["image/jpeg", "image/png", "image/gif", "image/webp"];
     if (!validExtensions.includes(file.type)) {
-        alert("Veuillez sélectionner un fichier image valide (JPEG, PNG, GIF, WEBP).");
+        alert("Please, select a valid image format type (JPEG, PNG, GIF, WEBP).");
         filePath.textContent = "";
         preview.innerHTML = "<span>Aucune image sélectionnée</span>";
         return;
@@ -46,18 +47,18 @@ function handleFile(file) {
 
     filePath.textContent = file.name;
 
-    // Afficher l'aperçu de l'image
+    // File preview
     const reader = new FileReader();
     reader.onload = (event) => {
-        preview.innerHTML = `<img src="${event.target.result}" alt="Aperçu de l'image">`;
+        preview.innerHTML = `<img src="${event.target.result}" alt="Image preview">`;
     };
     reader.readAsDataURL(file);
 }
 
-// Envoi du fichier au serveur Flask
+// Send the file to the Flask server
 uploadButton.addEventListener('click', () => {
     if (!selectedFile) {
-        alert('Veuillez sélectionner un fichier.');
+        alert('Please, select a file.');
         return;
     }
 
@@ -70,16 +71,16 @@ uploadButton.addEventListener('click', () => {
     })
         .then(response => response.json())
         .then(data => {
-            alert('Fichier envoyé avec succès : ' + data.message);
+            alert('File successfully sent : ' + data.message);
         })
         .catch(error => {
-            console.error('Erreur lors de l\'envoi :', error);
+            console.error('Error during submittion :', error);
         });
 });
 
-// Suppréssion du dossier upload
+// upload folder delete
 deleteButton.addEventListener('click', () => {
-    if (confirm("Êtes-vous sûr de vouloir supprimer le répertoire et son contenu ?")) {
+    if (confirm("Do you really want to delete the upload folder and its content ?")) {
         fetch('/delete', {
             method: 'DELETE'
         })
@@ -88,8 +89,8 @@ deleteButton.addEventListener('click', () => {
                 alert(data.message);
             })
             .catch(error => {
-                console.error('Erreur lors de la suppression :', error);
-                alert("Erreur lors de la suppression du répertoire.");
+                console.error('Error during deletion:', error);
+                alert("We cannot delete the folder, open the console for more information.");
             });
     }
 });

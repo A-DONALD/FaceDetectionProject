@@ -5,7 +5,7 @@ from tensorflow.keras import layers, models
 
 def train_model(model, train_data, epochs=10, save_path="models/model.h5"):
     history = model.fit(train_data, epochs=epochs)
-    # Sauvegarder le modèle
+    # Save the model
     os.makedirs(os.path.dirname(save_path), exist_ok=True)
     model.save(save_path)
     return history
@@ -28,11 +28,11 @@ def create_model(input_shape):
     return model
 
 def evaluate_model(model, test_data, history):
-    # Évaluer les performances sur le jeu de test
+    # Evaluate the performance in the test set
     test_loss, test_acc = model.evaluate(test_data)
     print(f"Test Accuracy: {test_acc}, Test Loss: {test_loss}")
 
-    # Générer des graphes
+    # Generate plot and graph
     plot_training_history(history)
 
 
