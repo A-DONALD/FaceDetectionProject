@@ -33,6 +33,8 @@ Before you begin, make sure you have the following installed on your local machi
    ```
    git clone https://github.com/A-DONALD/FaceDetectionProject.git
    ```
+   
+3. Create the "dataset" directory and download the dataset on [Kaggle](https://www.kaggle.com/datasets/ciplab/real-and-fake-face-detection), and rename the two folder into _real_ and _fake_
 
 ## Launch the project
 
