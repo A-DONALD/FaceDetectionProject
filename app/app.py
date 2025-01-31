@@ -15,11 +15,29 @@ app = Flask(__name__)
 
 MODEL_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), os.path.join('models', 'model.h5'))
 CLASS_NAMES = ["fake", "real"]
-upload_folder = './uploads'
-metrics_folder = "./metrics"
-os.makedirs(metrics_folder, exist_ok=True)
+UPLOAD_FOLDER = "./uploads"
+METRICS_FOLDER = "./metrics"
+os.makedirs(METRICS_FOLDER, exist_ok=True)
+#define model variable
+model = ''
+# Charge the data set
+train_data, test_data = load_dataset(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'dataset'), img_size=(600, 600))
 
-def predict_image(model, image_path, img_size=(600, 600)):
+if os.path.exists(MODEL_PATH):
+    # Use the model if already existing
+    print(f"Existing model found in {MODEL_PATH}. Launching...")
+    model = load_model(MODEL_PATH)
+else:
+    # Create the model
+    model = create_model(input_shape=(600, 600, 3))
+
+    # Train the model
+    history = train_model(model, train_data, epochs=10)
+
+    # Evaluate the model
+    evaluate_model(model, test_data, history)
+
+def predict_image(image_path, img_size=(600, 600)):
     # Charge the image and preprocess
     img = load_img(image_path, target_size=img_size)
     img_array = img_to_array(img)  # Convert in numpy
@@ -32,23 +50,6 @@ def predict_image(model, image_path, img_size=(600, 600)):
     confidence = predictions[0][predicted_class]  # Confidence
 
     return CLASS_NAMES[predicted_class], confidence
-
-if os.path.exists(MODEL_PATH):
-    # Use the model if already existing
-    print(f"Existing model found in {MODEL_PATH}. Launching...")
-    model = load_model(MODEL_PATH)
-else:
-    # Charge the data set
-    train_data, test_data = load_dataset(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'dataset'), img_size=(600, 600))
-
-    # Create the model
-    model = create_model(input_shape=(600, 600, 3))
-
-    # Train the model
-    history = train_model(model, train_data, epochs=10)
-
-    # Evaluate the model
-    evaluate_model(model, test_data, history)
 
 @app.route('/')
 def hello():
@@ -65,12 +66,12 @@ def upload_file():
         return jsonify({"error": "File with no name"}), 400
 
     # Save the file in the temp upload directory
-    os.makedirs(upload_folder, exist_ok=True)
-    file_path = os.path.join(upload_folder, file.filename)
+    os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+    file_path = os.path.join(UPLOAD_FOLDER, file.filename)
     file.save(file_path)
 
     if os.path.exists(file_path):
-        predicted_class, confidence = predict_image(model, file_path)
+        predicted_class, confidence = predict_image(file_path)
         print(f"predicted class : {predicted_class} with confidence {confidence:.2f}")
         return jsonify({"message": f"File {file.filename} save with success. predicted class : {predicted_class} with confidence {confidence:.2f}."}), 200
     else:
@@ -80,16 +81,9 @@ def upload_file():
 @app.route('/evaluate', methods=['GET'])
 def evaluate_model_api():
     if not os.path.exists(MODEL_PATH):
-        return jsonify({"error": "Le modèle n'existe pas. Veuillez entraîner un modèle avant d'évaluer."}), 400
+        return jsonify({"error": "Model doesn't exist in the directory."}), 400
 
-    # Charger le modèle
-    model = load_model(MODEL_PATH)
-    print("Modèle chargé avec succès.")
-
-    # Charger les données de test
-    _, test_data = load_dataset(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'dataset'))
-
-    # Séparer les images et les labels
+    # Separe labels
     X_test = []
     y_test = []
 
@@ -100,36 +94,36 @@ def evaluate_model_api():
     X_test = np.concatenate(X_test, axis=0)
     y_test = np.concatenate(y_test, axis=0)
 
-    # Faire les prédictions
+    # Perform prediction
     y_pred_probs = model.predict(X_test)
     y_pred = np.argmax(y_pred_probs, axis=1)
 
-    # Calcul des métriques
+    # Metrics calculation
     report = classification_report(y_test, y_pred, target_names=CLASS_NAMES, output_dict=True)
     confusion = confusion_matrix(y_test, y_pred)
 
-    # Sauvegarder les métriques en fichier JSON
-    report_path = os.path.join(metrics_folder, "classification_report.json")
+    # Save metrics into a JSON file
+    report_path = os.path.join(METRICS_FOLDER, "classification_report.json")
     with open(report_path, "w") as f:
         import json
         json.dump(report, f, indent=4)
 
-    print("Rapport de classification sauvegardé.")
+    print("Classification report saved.")
 
-    # Générer la matrice de confusion
+    # Generate confusion matrix
     plt.figure(figsize=(6, 5))
     sns.heatmap(confusion, annot=True, fmt="d", cmap="Blues", xticklabels=CLASS_NAMES, yticklabels=CLASS_NAMES)
-    plt.xlabel("Prédictions")
-    plt.ylabel("Vérité terrain")
-    plt.title("Matrice de confusion")
-    confusion_path = os.path.join(metrics_folder, "confusion_matrix.png")
+    plt.xlabel("Prediction")
+    plt.ylabel("Ground truth")
+    plt.title("Confusion matrix")
+    confusion_path = os.path.join(METRICS_FOLDER, "confusion_matrix.png")
     plt.savefig(confusion_path)
     plt.close()
 
-    print("Matrice de confusion générée et sauvegardée.")
+    print("Confusion matrix generated and saved.")
 
-    # Générer la courbe ROC
-    fpr, tpr, _ = roc_curve(y_test, y_pred_probs[:, 1])  # Probabilité de la classe "real"
+    # Generate ROC curve
+    fpr, tpr, _ = roc_curve(y_test, y_pred_probs[:, 1])  # "real" class prob
     roc_auc = auc(fpr, tpr)
 
     plt.figure(figsize=(6, 5))
@@ -139,14 +133,14 @@ def evaluate_model_api():
     plt.ylabel("True Positive Rate")
     plt.title("Receiver Operating Characteristic (ROC) Curve")
     plt.legend(loc="lower right")
-    roc_curve_path = os.path.join(metrics_folder, "roc_curve.png")
+    roc_curve_path = os.path.join(METRICS_FOLDER, "roc_curve.png")
     plt.savefig(roc_curve_path)
     plt.close()
 
-    print("Courbe ROC générée et sauvegardée.")
+    print("ROC curve generated and saved.")
 
     return jsonify({
-        "message": "Évaluation du modèle complétée avec succès.",
+        "message": "Model evaluation completed successfully.",
         "classification_report": report_path,
         "confusion_matrix": confusion_path,
         "roc_curve": roc_curve_path
@@ -155,9 +149,9 @@ def evaluate_model_api():
 @app.route('/delete', methods=['DELETE'])
 def delete_directory():
     try:
-        if os.path.exists(upload_folder):
+        if os.path.exists(UPLOAD_FOLDER):
             # Delete the directory and its content
-            shutil.rmtree(upload_folder)
+            shutil.rmtree(UPLOAD_FOLDER)
             return jsonify({"message": "Folder delete with success."}), 200
         else:
             return jsonify({"message": "The folder doesn't exist."}), 404

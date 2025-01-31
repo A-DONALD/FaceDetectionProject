@@ -1,4 +1,5 @@
 import tensorflow as tf
+import numpy as np
 from tensorflow.keras.utils import image_dataset_from_directory
 
 
@@ -16,7 +17,7 @@ def load_dataset(dataset_path, img_size=(600, 600), batch_size=32):
         dataset_path,
         validation_split=0.2,
         subset="validation",
-        seed=123,
+        seed= np.random.randint(0, 10000),
         image_size=img_size,
         batch_size=batch_size
     )
