@@ -86,6 +86,14 @@ body {
     background-color: #00b300;
 }
 
+.eval {
+    background-color: #c5904a;
+}
+
+.eval:hover {
+    background-color: #b36500;
+}
+
 .delete {
     background-color: #ff0051;
 }

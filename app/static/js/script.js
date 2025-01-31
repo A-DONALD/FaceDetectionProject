@@ -2,6 +2,7 @@ const dropZone = document.getElementById('drop-zone');
 const fileInput = document.getElementById('file-input');
 const filePath = document.getElementById('file-path');
 const uploadButton = document.getElementById('upload-btn');
+const evalButton = document.getElementById('eval-btn');
 const deleteButton = document.getElementById('delete-btn');
 const preview = document.getElementById('preview');
 
@@ -75,6 +76,21 @@ uploadButton.addEventListener('click', () => {
         })
         .catch(error => {
             console.error('Error during submittion :', error);
+        });
+});
+
+// Start evaluation
+evalButton.addEventListener('click', () => {
+    fetch('/evaluate', {
+        method: 'GET'
+    })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message);
+        })
+        .catch(error => {
+            console.error('Error during evaluation:', error);
+            alert("the evaluation didn't perform as excepted");
         });
 });
 
